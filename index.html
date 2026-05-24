@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Surprise 🎁</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            /* 全局统一换成可爱手写体 */
+            font-family: 'Comic Sans MS', 'Marker Felt', '微软雅黑', sans-serif;
+        }
+
+        body {
+            background: #fff;
+            position: fixed; 
+            width: 100%; 
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            cursor: pointer;
+            margin: 0;
+        }
+
+        .page {
+            position: absolute;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+            pointer-events: none;
+            padding: 20px;
+            text-align: center;
+        }
+
+            .page.active {
+                opacity: 1;
+                pointer-events: auto;
+            }
+
+        .text-animate {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeSlideUp 1s ease forwards;
+        }
+
+        @keyframes fadeSlideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .circle-dot {
+            position: absolute;
+            border-radius: 50%;
+            animation: circleScaleFade 2s ease-out forwards;
+        }
+
+        .smiley {
+            display: inline-block;
+            transform-origin: center center;
+            animation: fallDown 0.6s ease forwards;
+            color: #4B81AB;
+        }
+
+        @keyframes fallDown {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(90deg); 
+            }
+        }
+
+        @keyframes circleScaleFade {
+            0% {
+                transform: scale(0);
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: scale(10);
+                opacity: 0;
+            }
+        }
+
+        #page1 h1 {
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            font-weight: 500;
+            margin-bottom: 40px;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            border: none;
+            border-radius: 30px;
+            background: #ff4081;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 64, 129, 0.3);
+            transition: transform 0.2s;
+        }
+
+          
+
+        .lang-switch {
+            margin-top: 20px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        #page2 h1 {
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            font-weight: 300;
+        }
+
+            #page2 h1 span {
+                color: #4285F4;
+            }
+
+        #page2 p {
+            margin-top: 10px;
+            color: #888;
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            font-style: italic;
+        }
+
+        #page3 h1 {
+            font-size: clamp(1.2rem, 6vw, 2rem);
+            line-height: 1.4;
+            padding: 0 10px;
+        }
+
+        #page4 h1 {
+            font-size: clamp(3rem, 12vw, 6rem);
+            font-weight: bold;
+            letter-spacing: 6px;
+        }
+
+        #page5 {
+            background-size: cover;
+            background-position: center;
+            transition: background-image 0.6s ease;
+        }
+
+        .text-box {
+            background: #8495A9;
+            padding: 25px 40px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+
+            .text-box p {
+                color: #000000;
+                font-size: clamp(1.2rem, 4vw, 2rem);
+                line-height: 1.8;
+            }
+
+        .btn, .page, .text-box {
+            touch-action: manipulation;
+        }
+
+        #page5 {
+            position: relative;
+        }
+
+            #page5 .text-box {
+                position: absolute;
+                top: 75%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 80%;
+                max-width: 600px;
+            }
+
+        @media (orientation: landscape) {
+            #page5 .text-box {
+                top: 60%;
+                width: 60%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <audio id="bgMusic" loop preload="auto">
+        <source src="bgm.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="page active" id="page1">
+        <h1 class="text-animate">Ready for a surprise? 🎁</h1>
+        <button class="btn text-animate" onclick="goToPage(2); playMusic();">Yes, Open It!</button>
+       
+    </div>
+
+    <div class="page" id="page2" onclick="goToPage(3)">
+        <h1 class="text-animate">Hi <span>小熊</span></h1>
+       
+    </div>
+
+    <div class="page" id="page3" onclick="goToPage(4)">
+        <h1 class="text-animate">I'm not much of a talker, so let's skip the clichés and just cut to the chase.!! :D</h1>
+    </div>
+
+    <div class="page" id="page4" onclick="goToPage(5)">
+        <h1 class="text-animate">Happy Birthday <span class="smiley">:)</span></h1>
+    </div>
+
+    <div class="page" id="page5">
+        <div class="text-box text-animate">
+            <p>Wish you joy every day<br>and endless movies to watch</p>
+        </div>
+    </div>
+
+    <script>
+        let currentPage = 1;
+        const totalPages = 5;
+        const bgMusic = document.getElementById('bgMusic');
+        const bgImgList = [
+            "1.jpg",
+            "2.jpg",
+            "3.jpg"
+        ];
+        let imgIndex = 0;
+
+        function createRandomCircle() {
+            const page4 = document.getElementById('page4');
+            const colors = ['#ff4081', '#4285F4', '#FFC107', '#4CAF50', '#9C27B0', '#FF5722'];
+            setInterval(() => {
+                const circle = document.createElement('div');
+                circle.className = 'circle-dot';
+                let size = Math.random() * 20 + 10;
+                circle.style.width = size + 'px';
+                circle.style.height = size + 'px';
+                circle.style.left = Math.random() * 100 + '%';
+                circle.style.top = Math.random() * 100 + '%';
+                circle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                page4.appendChild(circle);
+                setTimeout(() => circle.remove(), 2000);
+            }, 300);
+        }
+
+        function goToPage(pageNum) {
+            if (pageNum > totalPages) return;
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(`page${pageNum}`).classList.add('active');
+            currentPage = pageNum;
+
+            const page = document.getElementById(`page${pageNum}`);
+            const elements = page.querySelectorAll('.text-animate');
+            elements.forEach(el => {
+                el.style.animation = 'none';
+                el.offsetHeight;
+                el.style.animation = null;
+            });
+
+            if (pageNum === 4) {
+                createRandomCircle();
+            }
+            if (pageNum === 5) {
+                document.getElementById('page5').style.backgroundImage = `url(${bgImgList[0]})`;
+            }
+        }
+
+        document.getElementById('page5').addEventListener('click', () => {
+            imgIndex = (imgIndex + 1) % bgImgList.length;
+            document.getElementById('page5').style.backgroundImage = `url(${bgImgList[imgIndex]})`;
+        });
+
+        function playMusic() {
+            bgMusic.play().catch(e => console.log("音频播放"));
+        }
+    </script>
+</body>
+</html>
